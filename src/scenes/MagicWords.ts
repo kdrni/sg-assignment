@@ -80,7 +80,6 @@ export class MagicWords extends BaseScene {
                     () => this.createAvatarFallback(avatar.name, userColors.get(avatar.name) || 0x3b82f6));
                 this.loadedAvatars.set(avatar.name, sprite);
             } catch (error) {
-                console.log(`Using fallback for ${avatar.name}`);
                 this.loadedAvatars.set(avatar.name, 
                     this.createAvatarFallback(avatar.name, userColors.get(avatar.name) || 0x3b82f6));
             }
@@ -94,7 +93,6 @@ export class MagicWords extends BaseScene {
                     () => this.createEmojiFallback(emoji.name));
                 this.loadedEmojis.set(emoji.name, sprite);
             } catch (error) {
-                console.log(`Using fallback for emoji ${emoji.name}`);
                 this.loadedEmojis.set(emoji.name, this.createEmojiFallback(emoji.name));
             }
         }
@@ -346,8 +344,6 @@ export class MagicWords extends BaseScene {
             Math.min(this.maxBubbleWidth, Math.floor(width * 0.3))
         );
 
-        console.log(newBubbleWidth)
-        
         // significant width change check
         const widthChanged = Math.abs(this.bubbleWidth - newBubbleWidth) > 20 || 
                            Math.abs(this.lastScreenWidth - width) > this.widthChangeThreshold;

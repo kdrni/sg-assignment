@@ -24,7 +24,6 @@ export class PhoenixFlame extends BaseScene {
                     this.setupEmitter();
                 })
                 .catch(() => {
-                    console.log('Fire texture not loaded, using fallback');
                     this.createFallbackTexture();
                 });
         } else {
