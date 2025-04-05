@@ -6,6 +6,7 @@ import { PhoenixFlame } from './scenes/PhoenixFlame';
 import { FpsCounter } from './components/FpsCounter';
 import { SceneMenu, MenuOption } from './components/SceneMenu';
 
+// setup
 const app = new Application({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -18,42 +19,42 @@ const app = new Application({
 
 document.getElementById('app')?.appendChild(app.view as HTMLCanvasElement);
 
+// precreate scenes
+const scenes = {
+    aceOfShadows: new AceOfShadows(app),
+    magicWords: new MagicWords(app),
+    phoenixFlame: new PhoenixFlame(app)
+};
+
 let currentScene: BaseScene | null = null;
 const fpsCounter = new FpsCounter();
 
-function switchScene(scene: BaseScene): void {
+function switchScene(sceneName: keyof typeof scenes): void {
+    const newScene = scenes[sceneName];
+    
+    if (currentScene === newScene) return;
+    
+    // cleanup current
     if (currentScene) {
         app.stage.removeChild(currentScene);
-        currentScene.destroy();
+        currentScene.cleanUp();
     }
     
-    currentScene = scene;
+    currentScene = newScene;
     currentScene.init();
     app.stage.addChild(currentScene);
-    
-    app.stage.removeChild(fpsCounter);
-    app.stage.addChild(fpsCounter);
 }
 
+// handle resizing
 window.addEventListener('resize', () => {
-    if (currentScene) {
-        currentScene.resize(app.screen.width, app.screen.height);
-    }
+    if (currentScene) currentScene.resize(app.screen.width, app.screen.height);
 });
 
+// menu setup
 const menuOptions: MenuOption[] = [
-    {
-        text: 'Ace of Shadows',
-        callback: () => switchScene(new AceOfShadows(app))
-    },
-    {
-        text: 'Magic Words',
-        callback: () => switchScene(new MagicWords(app))
-    },
-    {
-        text: 'Phoenix Flame',
-        callback: () => switchScene(new PhoenixFlame(app))
-    }
+    { text: 'Ace of Shadows', callback: () => switchScene('aceOfShadows') },
+    { text: 'Magic Words', callback: () => switchScene('magicWords') },
+    { text: 'Phoenix Flame', callback: () => switchScene('phoenixFlame') }
 ];
 
 const menu = new SceneMenu(menuOptions);
@@ -64,4 +65,5 @@ app.ticker.add((delta) => {
     fpsCounter.update(delta);
 });
 
-switchScene(new AceOfShadows(app));
+// start with first scene
+switchScene('aceOfShadows');
