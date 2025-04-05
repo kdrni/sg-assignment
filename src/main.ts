@@ -19,6 +19,75 @@ const app = new Application({
 
 document.getElementById('app')?.appendChild(app.view as HTMLCanvasElement);
 
+// fullscreen functionality
+function enterFullscreen() {
+    const docEl = document.documentElement;
+    
+    try {
+        if (docEl.requestFullscreen) {
+            docEl.requestFullscreen();
+        } else if ((docEl as any).webkitRequestFullscreen) { // Safari
+            (docEl as any).webkitRequestFullscreen();
+        } else if ((docEl as any).msRequestFullscreen) { // IE11
+            (docEl as any).msRequestFullscreen();
+        }
+    } catch (error) {
+        console.log('Fullscreen request failed:', error);
+        showFullscreenButton();
+    }
+}
+
+function showFullscreenButton() {
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    if (fullscreenBtn) {
+        fullscreenBtn.style.display = 'block';
+    }
+}
+
+// try fullscreen automatically on load
+window.addEventListener('load', () => {
+    enterFullscreen();
+    
+    // this likely fails due to browser security policies,
+    // so show the button after a short delay
+    setTimeout(showFullscreenButton, 300);
+});
+
+// add click event to canvas to try fullscreen on first click
+const appElement = document.getElementById('app');
+if (appElement) {
+    appElement.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+            enterFullscreen();
+        }
+    }, { once: true }); 
+}
+
+// fc btn
+const fullscreenBtn = document.getElementById('fullscreen-btn');
+if (fullscreenBtn) {
+    fullscreenBtn.addEventListener('click', () => {
+        enterFullscreen();
+        fullscreenBtn.style.display = 'none';
+    });
+    
+    // show button if user exits fullscreen
+    document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement) {
+            fullscreenBtn.style.display = 'block';
+        } else {
+            fullscreenBtn.style.display = 'none';
+        }
+    });
+}
+
+// click handler to document to try entering fullscreen on first user interaction
+document.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+        enterFullscreen();
+    }
+}, { once: true });
+
 // precreate scenes
 const scenes = {
     aceOfShadows: new AceOfShadows(app),

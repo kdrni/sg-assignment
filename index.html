@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>SoftGames Assignment - Drin</title>
     <style>
       body {
@@ -16,10 +18,25 @@
         height: 100vh;
         display: block;
       }
+      #fullscreen-btn {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: 1px solid white;
+        border-radius: 4px;
+        padding: 5px 10px;
+        cursor: pointer;
+        z-index: 1000;
+        font-family: Arial, sans-serif;
+        display: none; 
+      }
     </style>
   </head>
   <body>
     <div id="app"></div>
+    <button id="fullscreen-btn">Fullscreen</button>
     <script type="module" src="./src/main.ts"></script>
   </body>
 </html>
