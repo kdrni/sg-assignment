@@ -13,6 +13,7 @@
     "vite": "^6.2.0"
   },
   "dependencies": {
+    "@pixi/particle-emitter": "^5.0.8",
     "pixi.js": "7"
   }
 }
